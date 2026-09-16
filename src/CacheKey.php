@@ -893,8 +893,9 @@ class CacheKey
     // raw 16-byte binary UUID by its length, which escaping would change.
     private function stringifyBinding(mixed $binding) : string
     {
-        if (is_object($binding)
-            && get_class($binding) === "DateTime"
+        // Carbon is DateTimeInterface AND Stringable, DateTime(Immutable) is only DateTimeInterface
+        if ($binding instanceof DateTimeInterface
+            && ! $binding instanceof Stringable
         ) {
             $binding = $binding->format("Y-m-d-H-i-s");
         }
